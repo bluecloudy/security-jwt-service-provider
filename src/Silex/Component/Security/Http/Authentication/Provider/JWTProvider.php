@@ -16,10 +16,12 @@ class JWTProvider implements AuthenticationProviderInterface
      * @var UserProviderInterface
      */
     protected $userProvider;
+    protected $options;
 
-    public function __construct($userProvider)
+    public function __construct($userProvider, $options)
     {
         $this->userProvider = $userProvider;
+        $this->options = $options;
     }
 
     /**
@@ -41,6 +43,7 @@ class JWTProvider implements AuthenticationProviderInterface
             $lastContext = $token->getTokenContext();
 
             $token = new JWTToken($user->getRoles());
+            $token->setUsernameClaim($this->options['username_claim']);
             $token->setTokenContext($lastContext);
             $token->setUser($user);
 
